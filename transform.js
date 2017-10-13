@@ -131,7 +131,8 @@ function transform(file, api/*, options*/) {
     let mappings = {};
     const EXCLUDED_REGEXP_MAPPINGS = [
       /Ember\.computed\..+/,
-      /Ember\.run\..+/
+      /Ember\.run\..+/,
+      /Ember\.RSVP\..+/
     ];
 
     for (let mapping of MAPPINGS) {
