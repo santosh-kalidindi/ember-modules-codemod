@@ -12,7 +12,7 @@ const OPTS = {
   quote: 'single'
 };
 
-const EMBER_NAMESPACES = ['computed', 'inject'];
+const EMBER_NAMESPACES = ['inject'];
 
 module.exports = transform;
 
@@ -34,12 +34,17 @@ function transform(file, api/*, options*/) {
   // use this at the end to generate a report.
   let warnings = [];
 
+  if (file.path !== 'app/components/contact-list-item.js') {
+    return source;
+  }
+
   try {
     // Discover existing module imports, if any, in the file. If the user has
     // already imported one or more exports that we rewrite a global with, we
     // won't import them again. We also try to be smart about not adding multiple
     // import statements to import from the same module, condensing default
     // exports and named exports into one line if necessary.
+    console.log(file);
     let modules = findExistingModules(root);
 
     // Build a data structure that tells us how to map properties on the Ember
@@ -129,10 +134,16 @@ function transform(file, api/*, options*/) {
    */
   function buildMappings(registry) {
     let mappings = {};
+    const EXCLUDED_MAPPINGS = [
+      /Ember\.computed\..+/,
+      /Ember\.run\..+/
+    ];
 
     for (let mapping of MAPPINGS) {
       if (!mapping.deprecated) {
-        mappings[mapping.global.substr('Ember.'.length)] = new Mapping(mapping, registry);
+        if (!EXCLUDED_MAPPINGS.includes(mapping.global)) {
+          mappings[mapping.global.substr('Ember.'.length)] = new Mapping(mapping, registry);
+        }
       }
     }
 
