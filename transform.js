@@ -129,14 +129,14 @@ function transform(file, api/*, options*/) {
    */
   function buildMappings(registry) {
     let mappings = {};
-    const EXCLUDED_MAPPINGS = [
+    const EXCLUDED_REGEXP_MAPPINGS = [
       /Ember\.computed\..+/,
       /Ember\.run\..+/
     ];
 
     for (let mapping of MAPPINGS) {
       if (!mapping.deprecated) {
-        if (!EXCLUDED_MAPPINGS.includes(mapping.global)) {
+        if (!EXCLUDED_REGEXP_MAPPINGS.some((regex) => regex.test(mapping.global))) {
           mappings[mapping.global.substr('Ember.'.length)] = new Mapping(mapping, registry);
         }
       }
