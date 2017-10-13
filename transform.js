@@ -34,17 +34,12 @@ function transform(file, api/*, options*/) {
   // use this at the end to generate a report.
   let warnings = [];
 
-  if (file.path !== 'app/components/contact-list-item.js') {
-    return source;
-  }
-
   try {
     // Discover existing module imports, if any, in the file. If the user has
     // already imported one or more exports that we rewrite a global with, we
     // won't import them again. We also try to be smart about not adding multiple
     // import statements to import from the same module, condensing default
     // exports and named exports into one line if necessary.
-    console.log(file);
     let modules = findExistingModules(root);
 
     // Build a data structure that tells us how to map properties on the Ember
